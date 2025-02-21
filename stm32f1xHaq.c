@@ -54,6 +54,12 @@ uint32_t Get_PCLK2_Frequency(void)
     else
         return hclk;
 }
+//-----------NVIC-------------------------------
+void NVICx_enable(IRQn_Type IRQx)	
+{
+	NVIC->ISER[(unsigned int)IRQx/32]=1<<((IRQx%32));
+	
+}
 //-----------GPIO-------------------------------
 //	GPIO_INIT(GPIOA,3,INPUT,MODE_INPUT,PULL_UP);
 //	GPIO_INIT(GPIOC,13,OUTPUT_HIGH_SPEED,MODE_OUTPUT_PUSH_PULL,NO_PULL);
@@ -307,5 +313,10 @@ void USARTx_WRITE(USART_TypeDef *USARTx,unsigned char data)
 	while(!(USARTx->SR&(1<<7)));
 	USARTx->DR = data;
 	while(!(USARTx->SR&(1<<6)));
+}
+unsigned char USARTx_READ(USART_TypeDef *USARTx)
+{
+	while(!(USARTx->SR&(1<<5)));
+	return (unsigned char) (USARTx->DR);
 }
 
