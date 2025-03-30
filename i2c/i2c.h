@@ -4,7 +4,7 @@
 #include <stm32f10x.h>
 #include "gpio.h"
 
-#define TIME_OUT_I2C 1000000
+#define TIME_OUT_I2C 10000000
 
 typedef enum 
 {
@@ -17,7 +17,7 @@ void I2Cx_INIT(I2C_TypeDef *I2Cx,I2C_Pin pin,uint32_t speed);
 void checkBusy(void);
 uint8_t i2c_Start(I2C_TypeDef *I2Cx,uint8_t add,uint8_t dir,uint8_t ack);
 uint8_t i2c_sendData(I2C_TypeDef* I2Cx,uint8_t data);
-uint8_t i2c_readData(I2C_TypeDef *I2Cx,uint8_t ack);
+//uint8_t i2c_readData(I2C_TypeDef *I2Cx,uint8_t ack);
 uint8_t i2c_Stop(I2C_TypeDef* I2Cx);
 
 

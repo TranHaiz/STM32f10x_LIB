@@ -89,16 +89,27 @@ uint8_t i2c_sendData(I2C_TypeDef* I2Cx,uint8_t data)
 	} //wait TX finished
 	return 3;
 }
+//uint8_t i2c_Stop(I2C_TypeDef* I2Cx)
+//{
+//	timeout_i2c=TIME_OUT_I2C;
+//	while((!(I2Cx->SR1 & (1<<7)))|(!(I2Cx->SR1 & (1<<2)))) //TX+tranfer finished?
+//	{
+//		if(--timeout_i2c==0) return 0;
+//	}
+//	
+//	I2Cx->CR1 &= ~(1<<10); //disable ACK
+//	I2Cx->CR1 |= (1<<9); //STOP
+//	return 2;
+//}
+
 uint8_t i2c_Stop(I2C_TypeDef* I2Cx)
 {
+    I2C1->CR1 |= (1<<9); // G?i Stop
 	timeout_i2c=TIME_OUT_I2C;
-	while((!(I2Cx->SR1 & (1<<7)))|(!(I2Cx->SR1 & (1<<2)))) //TX+tranfer finished?
+   while((I2C1->SR2 & (1<<0)) != 0)
 	{
-		if(--timeout_i2c==0) return 0;
-	}
-	
-	I2Cx->CR1 &= ~(1<<10); //disable ACK
-	I2Cx->CR1 |= (1<<9); //STOP
+			if(timeout_i2c--==0) return 0;
+	};
 	return 2;
 }
 uint8_t i2c_readData(I2C_TypeDef *I2Cx,uint8_t ack)
