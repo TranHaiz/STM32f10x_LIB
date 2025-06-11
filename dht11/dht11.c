@@ -51,7 +51,7 @@ uint8_t dht_read(void) {
 }
 float dht_hum(void)
 {
-	if(dht_data[3]<10) 
+	if(dht_read() == 1) 
 	{
 		if(dht_data[1]<10)
 			return (float)dht_data[0] + (float)dht_data[1] / 10.0;
@@ -78,4 +78,23 @@ float dht_temp(void)
 	}
 	else 	
 		return 0; //cant read temp
+}
+
+void dht_temp_hum(float *temp,float *hum){
+	if( dht_read() == 1)
+	{
+		if(dht_data[1]<10)
+			*hum = (float)dht_data[0] + (float)dht_data[1] / 10.0;
+		else if (dht_data[1]>=100) 
+			*hum = (float)dht_data[0] + (float)dht_data[1] / 1000.0;
+		else 
+			*hum = (float)dht_data[0] + (float)dht_data[1] / 100.0;
+		
+		if(dht_data[3]<10) 
+			*temp = (float)dht_data[2] + (float)dht_data[3] / 10.0;
+		else if (dht_data[3]>=100) 
+			*temp = (float)dht_data[2] + (float)dht_data[3] / 1000.0;
+		else 
+			*temp = (float)dht_data[2] + (float)dht_data[3] / 100.0;
+	}
 }

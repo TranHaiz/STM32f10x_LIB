@@ -1,60 +1,60 @@
 #include "gpio.h"
 
 ////-----------CLOCK-------------------------------
-//unsigned int get_system_clock(void) {
-//    unsigned int sysclk;
-//    unsigned int clk_src = (RCC->CFGR >> 2) & 0x3; // L?y bit SWS (2:3)
+unsigned int get_system_clock(void) {
+    unsigned int sysclk;
+    unsigned int clk_src = (RCC->CFGR >> 2) & 0x3; // L?y bit SWS (2:3)
 
-//    if (clk_src == 0) {  
-//        sysclk = 8000000; // HSI = 8 MHz
-//    } 
-//    else if (clk_src == 1) {  
-//        sysclk = 8000000; // HSE = 8 MHz (gi? s?)
-//    } 
-//    else if (clk_src == 2) {  
-//        unsigned int pll_src = (RCC->CFGR >> 16) & 0x1; // PLLSRC (bit 16)
-//        unsigned int pll_mul = ((RCC->CFGR >> 18) & 0xF) + 2; // PLLMUL (18:21)
+    if (clk_src == 0) {  
+        sysclk = 8000000; // HSI = 8 MHz
+    } 
+    else if (clk_src == 1) {  
+        sysclk = 8000000; // HSE = 8 MHz (gi? s?)
+    } 
+    else if (clk_src == 2) {  
+        unsigned int pll_src = (RCC->CFGR >> 16) & 0x1; // PLLSRC (bit 16)
+        unsigned int pll_mul = ((RCC->CFGR >> 18) & 0xF) + 2; // PLLMUL (18:21)
 
-//        if (pll_src == 0) {  
-//            sysclk = (8000000 / 2) * pll_mul; // PLL t? HSI/2
-//        } else {  
-//            sysclk = 8000000 * pll_mul; // PLL t? HSE
-//        }
-//    } 
-//    else {
-//        sysclk = 0; // Kh?ng h?p l?
-//    }
+        if (pll_src == 0) {  
+            sysclk = (8000000 / 2) * pll_mul; // PLL t? HSI/2
+        } else {  
+            sysclk = 8000000 * pll_mul; // PLL t? HSE
+        }
+    } 
+    else {
+        sysclk = 0; // Kh?ng h?p l?
+    }
 
-//    unsigned int ahb_prescaler = ((RCC->CFGR >> 4) & 0xF); // HPRE
-//		
-//    if (ahb_prescaler >= 8) {
-//        sysclk /= (1 << (ahb_prescaler - 7)); // Chia theo AHB Prescaler
-//    }
+    unsigned int ahb_prescaler = ((RCC->CFGR >> 4) & 0xF); // HPRE
+		
+    if (ahb_prescaler >= 8) {
+        sysclk /= (1 << (ahb_prescaler - 7)); // Chia theo AHB Prescaler
+    }
 
-//    return sysclk;
-//}
-//uint32_t Get_PCLK1_Frequency(void) 
-//	{
-//		unsigned int SystemCoreClock=get_system_clock();
-//    uint32_t hclk = SystemCoreClock;
-//    uint32_t prescaler = ((RCC->CFGR >> 8) & 0x07);  // APB1 prescaler (Bits 10:8)
+    return sysclk;
+}
+uint32_t Get_PCLK1_Frequency(void) 
+	{
+		unsigned int SystemCoreClock=get_system_clock();
+    uint32_t hclk = SystemCoreClock;
+    uint32_t prescaler = ((RCC->CFGR >> 8) & 0x07);  // APB1 prescaler (Bits 10:8)
 
-//    if (prescaler >= 4)  // N?u gi? tr? t? 4 tr? l?n, th?c t? l? 2^(prescaler - 3)
-//        return hclk >> (prescaler - 3);
-//    else
-//        return hclk;  // Kh?ng chia n?u prescaler < 4
-//}
-//uint32_t Get_PCLK2_Frequency(void) 
-//	{
-//		unsigned int SystemCoreClock=get_system_clock();
-//    uint32_t hclk = SystemCoreClock;
-//    uint32_t prescaler = ((RCC->CFGR >> 11) & 0x07);  // APB2 prescaler (Bits 13:11)
+    if (prescaler >= 4)  // N?u gi? tr? t? 4 tr? l?n, th?c t? l? 2^(prescaler - 3)
+        return hclk >> (prescaler - 3);
+    else
+        return hclk;  // Kh?ng chia n?u prescaler < 4
+}
+uint32_t Get_PCLK2_Frequency(void) 
+	{
+		unsigned int SystemCoreClock=get_system_clock();
+    uint32_t hclk = SystemCoreClock;
+    uint32_t prescaler = ((RCC->CFGR >> 11) & 0x07);  // APB2 prescaler (Bits 13:11)
 
-//    if (prescaler >= 4)
-//        return hclk >> (prescaler - 3);
-//    else
-//        return hclk;
-//}
+    if (prescaler >= 4)
+        return hclk >> (prescaler - 3);
+    else
+        return hclk;
+}
 
 void GPIOx_INIT(GPIO_TypeDef* GPIOx,uint8_t pin, uint8_t mode, uint8_t pull, uint8_t speed)
 {

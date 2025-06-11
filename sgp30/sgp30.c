@@ -6,11 +6,8 @@ void SGP30_INIT(I2C_TypeDef *I2Cx,I2C_Pin pin)
 {
 	I2Cn=I2Cx;
 	I2Cx_INIT(I2Cx,(I2C_Pin)pin,100000);
-	i2c_Start(I2Cx,0x58,0,0);
-	i2c_sendData(I2Cx,0x20); //MSB command
-	i2c_sendData(I2Cx,0x03); //LSB command
-	i2c_Stop(I2Cx);
 }
+
 void SGP30_START(void){
 	i2c_Start(I2Cn,0x58,0,0);
 	i2c_sendData(I2Cn,0x20); //MSB command
@@ -24,9 +21,9 @@ uint32_t SGP30_READ(void)
 	i2c_Start(I2Cn,0x58,0,0);
 	i2c_sendData(I2Cn,0x20); //MSB command
 	i2c_sendData(I2Cn,0x08); //LSB command
-	i2c_Stop(I2C1);
+	i2c_Stop(I2Cn);
 	delay_ms(50);
-	i2c_Start(I2C1,0x58,1,0);
+	i2c_Start(I2Cn,0x58,1,0);
 	for(int i=0;i<6;i++)
 	{
 		if(i==5) buff[i] = i2c_readData(I2Cn,0);

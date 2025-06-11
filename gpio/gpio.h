@@ -7,6 +7,11 @@
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
+
+typedef enum{
+	FALSE=0,
+	TRUE=1
+} bool;
 //--------------------------------------------
 #define ENABLE 1
 #define DISABLE 0
